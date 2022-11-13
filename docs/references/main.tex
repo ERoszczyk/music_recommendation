@@ -1,0 +1,169 @@
+\documentclass[a4paper,titleauthor]{mwart}
+
+\usepackage{polski}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{array}
+\usepackage[a4paper, total={15cm, 27cm}]{geometry}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{dirtytalk}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{amssymb}
+\usepackage{subcaption}
+\usepackage[newfloat]{minted}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{lipsum}
+\usepackage{authblk}
+\usepackage{setspace}
+
+\vspace{5mm} %5mm vertical space
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+\begin{document}
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+
+\def\infinity{\rotatebox{90}{8}}
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+        \huge Politechnika Warszawska\\
+        
+        \vspace*{1.5cm}
+        
+        \vspace{5.5cm}
+        \Huge Rekomendacja muzyki za pomocą metod sztucznej inteligencji\\
+            
+        \vspace{5.5cm}
+            
+        \huge Ewa Roszczyk\\
+        304077
+        
+        \vspace{1cm}
+        \huge promotor\\
+        dr inż. Mateusz Modrzejewski
+        \vfill
+            
+        Warszawa 2022\\
+            
+    \end{center}
+\end{titlepage}
+
+\date{\today}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Wstęp}
+
+Tematem mojej pracy dyplomowej jest "rekomendacja muzyki za pomocą metod sztucznej inteligencji". Zdecydowałam się na niego ze względu na kierunek moich studiów - informatyka, specjalność Sztuczna Inteligencja oraz na zainteresowanie muzyką. Od dzieciństwa stanowiła ona bardzo dużą część mojego życia, a obecnie gram w zespole, przez co ten temat wydał mi się idealnym połączeniem. 
+
+\section{Działania wykonane w trakcie VI semestru}
+
+\subsection{Zebranie i analiza literatury}
+W trakcie semestru najbardziej skupiłam się na analizie dostępnej literatury. Najwięcej przeanalizowanych przeze mnie artykułów pochodzi z konferencji ISMIR. Przeanalizowana przeze mnie literatura znajduje się na końcu raportu w bibliografii. Dzięki tym artykułom poszerzyłam ogólną wiedzę na temat rekomendacji, tagowania i generowania muzyki. Dowiedziałam się o aktualnie stosowanych metodach rekomendacji: 
+\begin{itemize}
+    \item Collaborative Filtering Recommendation System,
+    \item Content Based Recommendation System,
+    \item Hybrid Recommendation System.
+\end{itemize}
+Zapoznałam się również z wadami i zaletami każdego z powyższych rozwiązań. Dodatkowo poznałam sposoby oceny jakości rekomendacji i problemy, które najczęściej się spotyka.
+
+Dzięki jednemu z artykułów \cite{korzeniowski2021artist} poszerzyłam swoją wiedzę odnośnie sieci GNN, która wykorzystywana jest w systemach rekomendacji do wyszukiwania artystów, którzy są najbardziej do siebie podobni. Przy rekomendacji sieć GNN daje lepsze wyniki niż sieć DNN. Zgodnie z przeczytanym artykułem dowiedziałam się również o bazie danych artystów OLGA (“Oh, what a Large Graph of Artists”). 
+
+Kolejny artykuł, z którym się zapoznałam \cite{garcia2021leveraging}, dotyczył rozpoznawania instrumentów muzycznych. W celu rozpoznania nowego dźwięku tylko za pomocą kilku próbek, zastosowano "few-shot learning" oparty na hierarchii instrumentów. Dzięki temu model może nauczyć się nowego dźwięku za pomocą kilku próbek, ponieważ rozpoznaje cechy rodziny instrumentów. Im głębsze jest drzewo, tym dokładniejsze rodziny instrumentów odwzorowuje model. 
+
+Artykuł \cite{hakimi2020bebopnet} ukazuje problem generowania spersonalizowanej muzyki. Główną trudnością w ocenie jest subiektywność. Autorzy proponują nowy proces generowania muzyki, który uczy się i optymalizuje gust muzyczny użytkownika. Opisywane rozwiązanie składa się z 4 elementów: BeboopNet, badań preferencji użtkownika, uczenia metrycznego preferencji użytkownika i optymalizacji generowania muzyki poprzez planowanie. Temat generowania spersonalizowanych treści jest rzadko poruszany w literaturze i artykuł pozostawia jeszcze wiele pytań i otwartych do wykorzystania możliwości.
+
+ W artykule \cite{madaghiele2021mingus} przedstawiony został MINGUS - architektura seq2seq przeznaczona do modelowania i generowania monofonicznych jazzowych linii melodycznych. MINGUS opiera się na oddzielnym przewidywaniu wysokości dźwięku i czasu trwania. Model został przetestowany na popularnych zestawach danych i oceniony na różnych poziomach przy użyciu szerokiej gamy metryk, wykazując porównywalną wydajność w stosunku do aktualnego stanu wiedzy.
+
+Dzięki zebranej literaturze mniej więcej wyznaczyłam kierunek, w którym chciałabym się kierować przy dalszej pracy.
+
+\subsection{Zebranie i analiza dostępnych narzędzi}
+W trakcie semestru zapoznałam się również z poniższymi bibliotekami oraz narzędziami, które mogą przydać się podczas dalszej pracy.\newline
+
+\textbf{Narzędzia:}
+\begin{itemize}
+    \item \textbf{Streamlit \cite{Streamlit}} - przekształca skrypty danych w aplikacje internetowe w ciągu kilku minut,
+    \item \textbf{Gradio \cite{Gradio}} - umożliwia zademonstrowanie modelu uczenia maszynowego za pomocą przyjaznego interfejsu WWW,
+    \item \textbf{FFmpeg \cite{FFmpeg}} - zbiór bibliotek i narzędzi do przetwarzania treści multimedialnych, takich jak dźwięk, wideo, napisy i powiązane metadane,
+    \item \textbf{mir\_eval \cite{mireval}} – zapewnia przejrzysty, ustandaryzowany i prosty sposób oceny systemów MIR,
+    \item \textbf{PyAudio \cite{pyaudio}} - wrappery do pracy z audio.
+\end{itemize}
+Przy pomocy dwóch pierwszych narzędzi stworzyłam dwie proste aplikacje, aby lepiej poznać ich możliwości. Aplikacje znajdują się \href{https://github.com/ERoszczyk/MIR}{tutaj}.\newline
+
+\textbf{Klasyczne biblioteki:}
+\begin{itemize}
+    \item \textbf{NumPy \cite{numpy}} - obsługa dużych, wielowymiarowych tabel i macierzy,
+    \item \textbf{SciPy \cite{scipy}} – obliczenia naukowe i techniczne, obsługa plików wav,
+    \item \textbf{pandas \cite{pandas}} - analiza danych.\newline
+\end{itemize}
+
+\textbf{Biblioteki do obróbki audio:}
+\begin{itemize}
+    \item \textbf{Librosa \cite{librosa}} - pakiet służący do analizy muzyki i dźwięku. Dostarcza elementów niezbędnych do tworzenia systemów wyszukiwania informacji o muzyce,
+    \item \textbf{Pydub \cite{pydub}} -  pakiet umożliwiający odtwarzanie oraz prostą obróbkę plików muzycznych i dźwiękowych w formatach "mp3", "wav" oraz "ogg",
+    \item \textbf{Essentia \cite{Essentia}} - pakiet do analizy dźwięku i wyszukiwania informacji muzycznych na podstawie dźwięku. Zawiera obszerną kolekcję algorytmów, w tym funkcje wejścia/wyjścia audio, standardowe bloki cyfrowego przetwarzania sygnału, statystyczną charakterystykę danych, szeroką gamę spektralnych, czasowych, tonalnych i wysokopoziomowych deskryptorów muzycznych oraz narzędzia do wnioskowania z wykorzystaniem modeli głębokiego uczenia,
+    \item \textbf{Soundfile \cite{Soundfile}} - bardzo prosta biblioteka do czytania i zapisywanie plików audio,
+    \item \textbf{Audiomentations \cite{Audiomentations}} - biblioteka do augmentacji danych audio. Zainspirowana biblioteką \textit{albumentations \cite{albumentations}},
+    \item \textbf{Pedalboard \cite{pedalboard}} - biblioteka służąca do manipulacji dźwiękiem: dodawania efektów, odczytu oraz zapisu danych,
+    \item \textbf{Torchaudio \cite{Torchaudio}} - biblioteka do przetwarzania plików audio,
+    \item \textbf{Mirdata \cite{mirdata}} - biblioteka, która ma na celu standaryzację dostępu do zestawów danych audio w Pythonie, eliminując potrzebę pisania niestandardowych Data Loader w każdym projekcie i poprawiając odtwarzalność.\newline
+\end{itemize}
+
+\textbf{Biblioteki do obróbki MIDI:}
+\begin{itemize}
+    \item \textbf{MusPy \cite{MusPy}} -  biblioteka do symbolicznego generowania muzyki. Zapewnia ona podstawowe narzędzia do tworzenia systemu generowania muzyki, w tym zarządzanie zbiorami danych, wejście/wyjście danych, wstępne przetwarzanie danych i ocenę modelu,
+    \item \textbf{Pypianoroll \cite{Pypianoroll}} - biblioteka do pracy z rolkami fortepianowymi. Zapewnia podstawowe narzędzia do obsługi wielościeżkowych rolek fortepianowych, w tym wydajne wejścia/wyjścia, a także narzędzia do manipulacji, wizualizacji i oceny,
+    \item \textbf{Music21 \cite{Music21}} - zestaw narzędzi do odpowiadania na pytania z dziedziny muzyki przy użyciu komputerów, do badania dużych zbiorów danych muzycznych, do generowania przykładów muzycznych, do nauczania podstaw teorii muzyki, do edycji notacji muzycznej, do badania muzyki i mózgu oraz do komponowania muzyki (zarówno algorytmicznie, jak i bezpośrednio),
+    \item \textbf{Mido \cite{Mido}} - biblioteka do pracy z danymi MIDI,
+    \item \textbf{Pretty\_midi \cite{prettymidi}} - narzędzie do obsługi danych MIDI, tak aby były one w formacie, który można łatwo modyfikować i wyciągać z niego informacje,
+    \item \textbf{Python-midi \cite{pythonmidi}} - biblioteka do manipulowania, sekwencjonowania, nagrywania i odtwarzania strumieni MIDI.
+\end{itemize}
+
+
+\subsection{Wstępne eksperymenty}
+W ramach wstępnych eksperymentów, głównie skupiłam się na lepszym poznaniu przydatnych narzędzi i bibliotek. Razem z Olgą Krupą przygotowałyśmy prezentacje o obróbce audio, którą przedstawiłyśmy grupie. W ramach przygotowań do prezentacji bardzo poszerzyłam swoją wiedzę na temat możliwości bibliotek, które wymieniłam w poprzednim podrozdziale. Najważniejsze możliwości zebrałyśmy w \href{https://colab.research.google.com/drive/10R--YsNZOqnLUOtYypPCWV8BQW43dE2M?usp=sharing&fbclid=IwAR24x1rlG_fVO6I_3hVNAZ-NS7AMBjdRKEd_XsMV4M0SlSmgR_Saf-VVemg#scrollTo=aqfV3JdiHx1E}{notebooku}.
+
+\section{Działania wykonane w trakcie VII semestru}
+
+\subsection{Zebranie i analiza literatury}
+Artykuł \cite{hsu2016neural} - Bazowanie na sieci neuronowej rekomendując następny utwór ma największą wydajność, jeśli weźmiemy pod uwagę preferencje użytkowników i sekwencyjne wzorce słuchania. Zwiększenie kolejności łańcucha Markowa może stopniowo zwiększaj wydajność aż do osiągnięcia pewnego stałego poziomu.
+
+Artykuł \cite{ji2015next} - ludzie podczas danej sesji zazwyczaj słuchają piosenek tego samego piosenkarza, z tego samego albumu lub gatunku, tego samego pisarza (lyricist), kompozytora itp. (zweryfikowane przez embedding słuchanych piosenek do przestrzeni Euklidesowej). Często zdarza się, że piosenki w różnych sesjach leżą jednak daleko od siebie w przestrzeni. Można wywnioskować, że istnieje korelacja pomiędzy piosenkami w jednej sesji. 
+
+Artykuł \cite{gunawan2019music} - "Wyniki tego badania wskazują, że użytkownicy wolą rekomendacje uwzględniające gatunki muzyczne od rekomendacji opartych wyłącznie na podobieństwie."; "Po pierwsze, system rekomendacji muzyki powinien rozważyć informacje o gatunku muzycznym w celu zwiększenia jakości rekomendacji muzycznych. Po drugie, CRNN, które uwzględniają zarówno cechy częstotliwości, jak i wzorce sekwencji czasowej, mają ogólnie lepszą wydajność. Wskazuje na skuteczność jego hybrydowej struktury w wydobywaniu cech muzycznych. Na podstawie naszych analiz możemy zasugerować do przyszłych badań dodanie innych funkcji muzycznych w celu poprawy dokładności systemu rekomendacji, takich jak użycie tempogramu do przechwytywania lokalne tempo w określonym czasie."
+
+Artykuł \cite{choi2017convolutional} - Głównym wynikiem badania jest to, że dokładność CRNN jest nieco wyższa niż metod CNN, które łączą domeny częstotliwości i czasu oraz używają tej samej liczby parametrów.
+
+Artykuł \cite{choi2016automatic} - Porównanie trzech reprezentacji audio do automatycznego znakowania: STFT, MFCC i spektrogram Mel. CNN służy do trenowania funkcji muzycznych wysokiego poziomu w celu automatycznego tagowania. Wyniki badania wykazały, że CNN jest bardzo skuteczne głównie przy użyciu spektrogramów Mel jako reprezentacji dźwięku w porównaniu do STFT i MFCC.
+
+Dodatkowe interesujące artykuły:
+\begin{itemize}
+    \item Artykuł~\cite{zhang2022music} - Music Recommendation Model Based on Curly Neural Network, Convolutional Neural Network; Combining User Preference Characteristic System Experimental Model and Its Analysis Results.
+    \item Artykuł \cite{schedl2019deep} - opisane obecne rozwiązania oraz dostępna literatura.
+    \item "Muzyczny wirus korony królów" \cite{muzycznywirus} - dokładnie opisane sposoby rekomendacji muzyki wykorzystywane przez Spotify.
+    \item Artykuł~\cite{deng2015emotional} - rekomendacja muzyki na podstawie emocji.
+    \item Artykuł~\cite{horsburgh2015learning} - rekomendacja muzyki na podstawie tagów.
+\end{itemize}
+
+\newpage
+
+\begin{doublespace}
+\bibliographystyle{ieeetr}
+\renewcommand{\refname}{Bibliografia}
+\bibliography{citation.bib}
+\nocite{*}
+
+\end{doublespace}
+
+\end{document}

@@ -1,5 +1,4 @@
-from typing import List, Optional
-
+from typing import List
 from pydantic import BaseModel
 
 
@@ -12,4 +11,3 @@ class MxmObject(BaseModel):
     msd_id: str
     mxm_id: str
     attr_list: List[MxmAttribute]
-    # ranking_score: Optional[float]

@@ -1,24 +1,23 @@
-# raw data files downloaded from http://millionsongdataset.com/musixmatch/
+# raw data files downloaded from https://www.kaggle.com/datasets/nikhilnayak123/5-million-song-lyrics-dataset
 import sys
 import csv
 
 from typing import List
 
 from music_recommendation.dao.dao_FMS_Lyrics import DAOFMSLyrics
-from music_recommendation.dao.dao_msd_songs import DAOMsdSongs
 from music_recommendation.models.fms_lyrics import FMSLyrics
-from music_recommendation.models.msd_song import MsdSong
 maxInt = sys.maxsize
 
 while True:
     # decrease the maxInt value by factor 10
     # as long as the OverflowError occurs.
-
     try:
         csv.field_size_limit(maxInt)
         break
     except OverflowError:
         maxInt = int(maxInt/10)
+
+
 def is_info_line(line: str) -> bool:
     split_line: List[str] = line.replace(', ',"").replace(' ,',"").replace(',""',"").replace('"",',"").split(',')
     if len(line) > 200:

@@ -1,5 +1,3 @@
-# raw data files downloaded from http://millionsongdataset.com/musixmatch/
-
 from typing import List
 
 from music_recommendation.dao.dao_msd_songs import DAOMsdSongs

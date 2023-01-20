@@ -1,4 +1,2 @@
-*
-!/reports
-!.gitignore
-!README.md
+/features/*
+/models/*

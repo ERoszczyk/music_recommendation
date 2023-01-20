@@ -2,8 +2,8 @@
 
 from typing import List
 
-from music_recommendation.dao.dao_msd_triplets import DAOMsdTriplets
-from music_recommendation.models.msd_triplet import MsdTriplet
+from dao.dao_msd_triplets import DAOMsdTriplets
+from models.msd_triplet import MsdTriplet
 
 if __name__ == '__main__':
     dao_songs: DAOMsdTriplets = DAOMsdTriplets()

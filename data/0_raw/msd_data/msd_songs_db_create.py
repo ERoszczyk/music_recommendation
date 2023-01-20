@@ -1,7 +1,7 @@
 from typing import List
 
-from music_recommendation.dao.dao_msd_songs import DAOMsdSongs
-from music_recommendation.models.msd_song import MsdSong
+from dao.dao_msd_songs import DAOMsdSongs
+from models.msd_song import MsdSong
 
 if __name__ == '__main__':
     dao_songs: DAOMsdSongs = DAOMsdSongs()

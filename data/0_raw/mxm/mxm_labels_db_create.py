@@ -2,8 +2,8 @@
 
 from typing import List
 
-from music_recommendation.dao.dao_mxm_labels import DAOMxmLabels
-from music_recommendation.models.mxm_label import MxmLabel
+from dao.dao_mxm_labels import DAOMxmLabels
+from models.mxm_label import MxmLabel
 
 if __name__ == '__main__':
     dao_labels: DAOMxmLabels = DAOMxmLabels()

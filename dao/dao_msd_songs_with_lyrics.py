@@ -1,6 +1,6 @@
-from music_recommendation.config import MONGO_CLIENT, MONGODB_DB_NAME
-from music_recommendation.dao.dao_base import DAOBase
-from music_recommendation.models.msd_song import MsdSongWithLyrics
+from config import MONGO_CLIENT, MONGODB_DB_NAME
+from dao.dao_base import DAOBase
+from models.msd_song import MsdSongWithLyrics
 
 
 class DAOMsdSongsWithLyrics(DAOBase):

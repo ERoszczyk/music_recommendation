@@ -1,6 +1,6 @@
-from music_recommendation.config import MONGO_CLIENT, MONGODB_DB_NAME
-from music_recommendation.dao.dao_base import DAOBase
-from music_recommendation.models.fms_lyrics import FMSLyrics
+from config import MONGO_CLIENT, MONGODB_DB_NAME
+from dao.dao_base import DAOBase
+from models.fms_lyrics import FMSLyrics
 
 
 class DAOFMSLyrics(DAOBase):

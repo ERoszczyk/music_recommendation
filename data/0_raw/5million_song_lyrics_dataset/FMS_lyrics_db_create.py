@@ -4,8 +4,8 @@ import csv
 
 from typing import List
 
-from music_recommendation.dao.dao_FMS_Lyrics import DAOFMSLyrics
-from music_recommendation.models.fms_lyrics import FMSLyrics
+from dao.dao_FMS_Lyrics import DAOFMSLyrics
+from models.fms_lyrics import FMSLyrics
 maxInt = sys.maxsize
 
 while True:

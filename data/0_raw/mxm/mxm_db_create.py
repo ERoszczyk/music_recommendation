@@ -2,8 +2,8 @@
 
 from typing import List
 
-from music_recommendation.dao.dao_mxm_objects import DAOMxmObjects
-from music_recommendation.models.mxm_object import MxmObject, MxmAttribute
+from dao.dao_mxm_objects import DAOMxmObjects
+from models.mxm_object import MxmObject, MxmAttribute
 
 if __name__ == '__main__':
     dao_train: DAOMxmObjects = DAOMxmObjects('mxm_train')

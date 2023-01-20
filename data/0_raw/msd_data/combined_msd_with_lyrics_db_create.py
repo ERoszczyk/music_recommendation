@@ -1,10 +1,10 @@
 from typing import List
 
-from music_recommendation.dao.dao_FMS_Lyrics import DAOFMSLyrics
-from music_recommendation.dao.dao_msd_songs import DAOMsdSongs
-from music_recommendation.dao.dao_msd_songs_with_lyrics import DAOMsdSongsWithLyrics
-from music_recommendation.models.fms_lyrics import FMSLyrics
-from music_recommendation.models.msd_song import MsdSong, MsdSongWithLyrics
+from dao.dao_FMS_Lyrics import DAOFMSLyrics
+from dao.dao_msd_songs import DAOMsdSongs
+from dao.dao_msd_songs_with_lyrics import DAOMsdSongsWithLyrics
+from models.fms_lyrics import FMSLyrics
+from models.msd_song import MsdSong, MsdSongWithLyrics
 
 if __name__ == "__main__":
     # dao_lyrics = DAOFMSLyrics()

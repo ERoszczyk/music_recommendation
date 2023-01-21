@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 
@@ -11,3 +11,4 @@ class MxmObject(BaseModel):
     msd_id: str
     mxm_id: str
     attr_list: List[MxmAttribute]
+    sentiment: Optional[float] = None

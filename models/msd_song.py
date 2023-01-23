@@ -9,7 +9,7 @@ class MsdSong(BaseModel):
     release: str
     artist_name: str
     year: int
-    # ranking_score: Optional[float]
+    ratings_amount: Optional[int]
 
 
 class MsdSongWithLyrics(MsdSong):

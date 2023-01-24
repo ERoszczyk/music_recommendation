@@ -45,40 +45,58 @@ def calculate_cosi_similarity_matrix(tfidf_matrix):
 
 
 def get_songs_indices(songs_df):
-    return pd.Series(songs_df.index, index=songs_df['title'])
+    return pd.Series(songs_df.index, index=songs_df['song_id']).drop_duplicates()
 
 
-def get_recommended_songs_based_on_sigmoid_kernel(song_name, songs_df, n=10):
+def tuples_list_to_df(tuples_list):
+    df = pd.DataFrame(tuples_list, columns=['song_idx', 'score'])
+    df = df.set_index('song_idx')
+    return df
+
+
+def get_recommended_songs_based_on_sigmoid_kernel(songs_ids, songs_df, n=10):
     indices = get_songs_indices(songs_df)
-    idx = indices[song_name]
     tfid_matrix = calculate_tfidf_matrix(songs_df)
     songs_sig = calculate_sigmoid_kernel(tfid_matrix)
-    sig_scores = list(enumerate(songs_sig[idx]))
-    sig_scores = sorted(sig_scores, key=lambda x: x[1], reverse=True)
-    sig_scores = sig_scores[1:n + 1]
-    return sig_scores
+    sig_scores_df = pd.DataFrame(columns=['song_id', 'score'])
+    sig_scores_df = sig_scores_df.set_index('song_id')
+
+    for song_id in songs_ids:
+        idx = indices[song_id]
+        sig_scores = list(enumerate(songs_sig[idx]))
+        temp_df = tuples_list_to_df(sig_scores)
+        sig_scores_df = sig_scores_df.add(temp_df, fill_value=0)
+    sig_scores_df = sig_scores_df.sort_values(by='score', ascending=False)
+    sig_scores_df = sig_scores_df[1:n + 1]
+    return sig_scores_df
 
 
-def get_recommended_songs_based_on_cosine_similarity(song_name, songs_df, n=10):
+def get_recommended_songs_based_on_cosine_similarity(songs_ids, songs_df, n=10):
     indices = get_songs_indices(songs_df)
-    idx = indices[song_name]
     tfidf_matrix = calculate_tfidf_matrix(songs_df)
     songs_cos = calculate_cosi_similarity_matrix(tfidf_matrix)
-    return songs_cos[idx].argsort()[::-1][1:n + 1]
+    cos_scores_df = pd.DataFrame(columns=['score'])
+    for song_id in songs_ids:
+        idx = indices[song_id]
+        temp_df = pd.DataFrame(songs_cos[idx], columns=['score'])
+        cos_scores_df = cos_scores_df.add(temp_df, fill_value=0)
+    cos_scores_df = cos_scores_df.sort_values(by='score', ascending=False)
+    cos_scores_df = cos_scores_df[1:n + 1]
+    return cos_scores_df
 
 
-def print_recommendations_based_on_sigmoid_kernel(song_name, songs_df, n=10):
-    sig_scores = get_recommended_songs_based_on_sigmoid_kernel(song_name, songs_df, n)
-    print(f'Recommendations for {song_name}:')
-    for song_score in sig_scores:
-        print(songs_df['title'].iloc[song_score[0]], songs_df['artist_name'].iloc[song_score[0]])
+def print_recommendations_based_on_sigmoid_kernel(songs_ids, songs_df, n=10):
+    sig_scores_df = get_recommended_songs_based_on_sigmoid_kernel(songs_ids, songs_df, n)
+    print(f'Recommendations for {songs_ids}:')
+    for index, song_score in sig_scores_df.iterrows():
+        print(songs_df['title'].iloc[index], songs_df['artist_name'].iloc[index])
 
 
-def print_recommendations_based_on_cosine_similarity(song_name, songs_df, n=10):
-    cos_scores = get_recommended_songs_based_on_cosine_similarity(song_name, songs_df, n)
-    print(f'Recommendations for {song_name}:')
-    for song_score in cos_scores:
-        print(songs_df['title'].iloc[song_score], songs_df['artist_name'].iloc[song_score])
+def print_recommendations_based_on_cosine_similarity(songs_ids, songs_df, n=10):
+    cos_scores_df = get_recommended_songs_based_on_cosine_similarity(songs_ids, songs_df, n)
+    print(f'Recommendations for {songs_ids}:')
+    for index, song_score in cos_scores_df.iterrows():
+        print(songs_df['title'].iloc[index], songs_df['artist_name'].iloc[index])
 
 
 if __name__ == '__main__':
@@ -86,4 +104,4 @@ if __name__ == '__main__':
     songs: List[MsdSongWithLyrics] = dao_songs_with_lyrics.find_all()
     songs_df = database_data_to_dataframe(songs)
     songs_df = get_songs_with_lyrics_df(songs_df)
-    print_recommendations_based_on_cosine_similarity('Before He Kissed Me', songs_df, 10)
+    print_recommendations_based_on_cosine_similarity(['SOBDLRM12A8C13A0AC', 'SODVOFJ12AB0181EE6'], songs_df, 10)

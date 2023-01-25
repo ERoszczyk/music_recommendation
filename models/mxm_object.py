@@ -9,6 +9,7 @@ class MxmAttribute(BaseModel):
 
 class MxmObject(BaseModel):
     msd_id: str
+    msd_id_true: Optional[str] = None
     mxm_id: str
     attr_list: List[MxmAttribute]
     sentiment: Optional[float] = None

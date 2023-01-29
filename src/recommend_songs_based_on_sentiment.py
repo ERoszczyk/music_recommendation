@@ -1,5 +1,6 @@
 from typing import List
 
+import numpy as np
 import pandas as pd
 
 from dao.dao_msd_songs import DAOMsdSongs
@@ -32,6 +33,22 @@ def calculate_sentiment_difference(mxm_objects_df, user_songs):
         sentiment_diff_df['sentiment_diff'] = sentiment_diff_df['sentiment_diff'].add(
             (mxm_objects_df['sentiment'] - song_sentiment.values[0]).abs())
     return sentiment_diff_df
+
+
+def calculate_sentiment_similarity(mxm_objects_df, user_songs):
+    sentiment_sim_df = mxm_objects_df[['msd_id_true']].copy()
+    sentiment_sim_df.drop(mxm_objects_df.loc[mxm_objects_df['msd_id_true'].isin(user_songs)].index, inplace=True)
+    sentiment_sim_df['sentiment_sim'] = np.nan
+    msd_ids = mxm_objects_df['msd_id_true'].tolist()
+    for song in user_songs:
+        if song in msd_ids:
+            sentiment_sim_df.fillna(0, inplace=True)
+            song_sentiment = mxm_objects_df.loc[mxm_objects_df['msd_id_true'] == song, 'sentiment']
+            # df[df['line_race']==0].index
+            sentiment_sim_df['sentiment_sim'] = sentiment_sim_df['sentiment_sim'].add(
+                1 - (mxm_objects_df['sentiment'] - song_sentiment.values[0]).abs())
+    sentiment_sim_df.rename(columns={'msd_id_true': 'song_id'}, inplace=True)
+    return sentiment_sim_df
 
 
 def get_songs_to_recommend(user_songs, mxm_objects_df, n=10):

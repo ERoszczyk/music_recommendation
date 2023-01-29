@@ -16,3 +16,4 @@ class MsdSongWithLyrics(MsdSong):
     tag: Optional[str]
     features: Optional[List[str]]
     lyrics: Optional[str]
+    representation_vector: Optional[List[float]]

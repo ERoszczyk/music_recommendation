@@ -11,3 +11,6 @@ class DAOMxmLabels(DAOBase):
                          "mxm_labels",
                          MxmLabel,
                          MxmLabel)
+
+    def get_dict_of_translations(self) -> dict:
+        return {mxm_label.attr_id: mxm_label.attr_name for mxm_label in self.find_all()}

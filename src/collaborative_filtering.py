@@ -56,14 +56,14 @@ def calculate_user_similarity(triplets_df, user_id, user_similarity_threshold=0.
     return similar_users
 
 
-def get_recommended_song_info_df(songs_to_recommend, n):
+def get_recommended_song_info_df(songs_to_recommend, songs_df, n):
     songs_to_recommend_info = pd.DataFrame(columns=songs_df.columns.values)
     for song in songs_to_recommend[:n]:
         songs_to_recommend_info = songs_to_recommend_info.append(songs_df.loc[songs_df['song_id'] == song])
     return songs_to_recommend_info
 
 
-def get_songs_to_recommend_for_user(triplets_df, user_id, n=10):
+def get_songs_to_recommend_for_user(triplets_df, user_id, songs_df, n=10):
     similar_users = calculate_user_similarity(triplets_df, user_id)
     users_songs_df = pd.DataFrame(columns=triplets_df.columns.values)
     for i in range(len(similar_users)):
@@ -71,7 +71,7 @@ def get_songs_to_recommend_for_user(triplets_df, user_id, n=10):
         users_songs_df = users_songs_df.append(temp)
     songs_to_recommend = users_songs_df.sort_values('listen_count', ascending=False)['song_id']
     songs_to_recommend = songs_to_recommend.unique()
-    return get_recommended_song_info_df(songs_to_recommend, n)
+    return get_recommended_song_info_df(songs_to_recommend, songs_df, n)
 
 
 def get_similar_users_songs(triplets_df, user_id, similar_users):
@@ -98,18 +98,18 @@ def calculate_song_score(similar_user_songs, similar_users):
     return song_scores
 
 
-def get_songs_to_recommend_for_user_considering_user_similarity(triplets_df, user_id, n=10):
+def get_songs_to_recommend_for_user_considering_user_similarity(triplets_df, user_id, songs_df, n=10):
     similar_users = calculate_user_similarity(triplets_df, user_id)
     similar_user_songs = get_similar_users_songs(triplets_df, user_id, similar_users)
     song_scores = calculate_song_score(similar_user_songs, similar_users)
-    songs_to_recommend = song_scores.sort_values('total_score', ascending=False)['song_id']
-    recommended_songs = get_recommended_song_info_df(songs_to_recommend, n)
-    # Add score column
-    for song in recommended_songs['song_id']:
-        recommended_songs.loc[recommended_songs['song_id'] == song, 'score'] = song_scores[
-            song_scores['song_id'] == song]['total_score'].values[0]
+    # songs_to_recommend = song_scores.sort_values('total_score', ascending=False)['song_id']
+    # recommended_songs = get_recommended_song_info_df(songs_to_recommend, songs_df, n)
+    # # Add score column
+    # for song in recommended_songs['song_id']:
+    #     recommended_songs.loc[recommended_songs['song_id'] == song, 'score'] = song_scores[
+    #         song_scores['song_id'] == song]['total_score'].values[0]
     # recommended_songs['score'] = song_scores.sort_values('total_score', ascending=False)['total_score']
-    return recommended_songs
+    return song_scores
 
 
 if __name__ == '__main__':
@@ -126,7 +126,7 @@ if __name__ == '__main__':
     triplets_df = get_triplets_by_song_ids(triplets_df, songs_100_ratings)
 
     # reduce df due to 43GiB memory allocation
-    reduced_triplets_df = triplets_df[:500000]
+    reduced_triplets_df = triplets_df[:100000]
 
     # get user_ids
     user_ids = list(reduced_triplets_df['user_id'].unique())
@@ -145,7 +145,7 @@ if __name__ == '__main__':
     #     index += 1
 
     songs_to_recommend_considering_us = get_songs_to_recommend_for_user_considering_user_similarity(reduced_triplets_df,
-                                                                                                    user_id)
+                                                                                                    user_id, songs_df)
     print(f'Songs recommended for user {user_id} are:')
     index = 1
     for i, song_info in songs_to_recommend_considering_us.iterrows():

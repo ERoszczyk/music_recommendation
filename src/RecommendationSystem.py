@@ -30,6 +30,9 @@ class RecommendationSystem:
         self.reduce_triplets_df = reduce_triplets_df
         self.reduce_triplets_by_rows = reduce_triplets_by_rows
 
+    def change_user_id(self, user_id):
+        self.user_id = user_id
+
     def set_collaborative_filtering(self, if_collaborative_filtering):
         self.collaborative_filtering = if_collaborative_filtering
 
@@ -64,6 +67,8 @@ class RecommendationSystem:
                 self.triplets_df = get_triplets_by_song_ids(self.triplets_df,
                                                             get_songs_rated_by_more_than_n_users(self.song_df,
                                                                                                  self.reduce_songs_by_ratings_amount))
+            else:
+                self.triplets_df = get_triplets_by_song_ids(self.triplets_df, self.song_df)
             if self.reduce_triplets_df:
                 self.triplets_df = self.triplets_df[:self.reduce_triplets_by_rows]
             start_time = time.time()

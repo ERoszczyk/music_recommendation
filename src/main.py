@@ -12,9 +12,11 @@ from dao.dao_msd_songs import DAOMsdSongs
 from dao.dao_msd_songs_with_lyrics import DAOMsdSongsWithLyrics
 from dao.dao_msd_triplets import DAOMsdTriplets
 from dao.dao_mxm_objects import DAOMxmObjects
+from dao.dao_user_recommendation import DAOUserRecommendation
 from models.msd_song import MsdSong, MsdSongWithLyrics
 from models.msd_triplet import MsdTriplet
 from models.mxm_object import MxmObject
+from models.user_recommendation import UserRecommendation
 from services.sentiment_prediction import create_dict_from_mxm_labels
 from src.RecommendationSystem import RecommendationSystem
 from src.content_based_filtering import get_songs_with_lyrics_df
@@ -31,7 +33,7 @@ def database_data_to_dataframe(data):
     return df
 
 
-@st.cache(allow_output_mutation=True)
+# @st.cache(allow_output_mutation=True)
 def load_data():
     start = time.time()
     dao_triplets: DAOMsdTriplets = DAOMsdTriplets()
@@ -47,13 +49,13 @@ def load_data():
 
     dao_mxm_objects: DAOMxmObjects = DAOMxmObjects("mxm")
     mxm_objects_df = database_data_to_dataframe(dao_mxm_objects.find_all())
-    mxm_labels_dict = create_dict_from_mxm_labels()
-    mxm_readable = dao_mxm_objects.get_all_readable_form(mxm_labels_dict)
-    mxm_objects_readable_df = database_data_to_dataframe(mxm_readable)
+    # mxm_labels_dict = create_dict_from_mxm_labels()
+    #  mxm_readable = dao_mxm_objects.get_all_readable_form(mxm_labels_dict)
+    # mxm_objects_readable_df = database_data_to_dataframe(mxm_readable)
     end = time.time()
     print("Czas wczytania danych: ", end - start)
 
-    return triplets_df, songs_df, songs_with_lyrics_df, mxm_objects_df, mxm_objects_readable_df
+    return triplets_df, songs_df, songs_with_lyrics_df, mxm_objects_df  # , mxm_objects_readable_df
 
 
 def st_show_datasets(triplets_df, songs_df, songs_with_lyrics_df, mxm_objects_df):
@@ -114,7 +116,10 @@ def st_recommendation_system_methods_checkbox(recommendation_system):
 
 def get_recommended_song_info_df(songs_to_recommend, songs_df, n):
     songs_to_recommend_info = pd.DataFrame(columns=songs_df.columns.values)
+    songs_to_recommend = songs_to_recommend.drop_duplicates(subset=['song_id'], keep='first')
+    songs_df = songs_df.drop_duplicates(subset=['song_id'], keep='first')
     songs_to_recommend.sort_values(by=['score'], ascending=False, inplace=True)
+    # songs_to_recommend = songs_to_recommend.iloc[0:, :]
     for song in songs_to_recommend['song_id'].tolist()[:n]:
         songs_to_recommend_info = songs_to_recommend_info.append(songs_df.loc[songs_df['song_id'] == song])
     return songs_to_recommend_info
@@ -158,24 +163,53 @@ def show_recommendations(recommendation_system, songs_df, triplets_df, user_id, 
         index += 1
 
 
+# if __name__ == '__main__':
+#     triplets_df, songs_df, songs_with_lyrics_df, mxm_objects_df, mxm_objects_readable_df = load_data()
+#
+#     st.write("""
+#     # Rekomendacje muzyki za pomocą metod sztucznej inteligencji
+#     """)
+#     st_show_datasets(triplets_df, songs_df, songs_with_lyrics_df, mxm_objects_readable_df)
+#     reduce_triplets_by_rows = 100000
+#     user_id = st_selectbox_user_id_where_songs_in_songs_with_lyrics_df(triplets_df[:reduce_triplets_by_rows],
+#                                                                        songs_with_lyrics_df)
+#     recommendation_system = RecommendationSystem(user_id, triplets_df, songs_df, mxm_objects_df, songs_with_lyrics_df,
+#                                                  reduce_songs_by_ratings_amount=100,
+#                                                  reduce_triplets_by_rows=reduce_triplets_by_rows)
+#     if_show_datasets = st_recommendation_system_methods_checkbox(recommendation_system)
+#     is_submit = st.button('Wygeneruj rekomendacje')
+#     if is_submit:
+#         if if_show_datasets:
+#             user_songs = get_songs_user_listened_to(triplets_df, user_id)['song_id']
+#             show_songs_user_listened_to(triplets_df, user_id, songs_df)
+#             show_datasets(songs_with_lyrics_df, mxm_objects_readable_df, user_songs.tolist())
+#         show_recommendations(recommendation_system, songs_df, triplets_df, user_id, 10)
 if __name__ == '__main__':
-    triplets_df, songs_df, songs_with_lyrics_df, mxm_objects_df, mxm_objects_readable_df = load_data()
+    triplets_df, songs_df, songs_with_lyrics_df, mxm_objects_df = load_data()
+    print("loaded data")
 
-    st.write("""
-    # Rekomendacje muzyki za pomocą metod sztucznej inteligencji
-    """)
-    st_show_datasets(triplets_df, songs_df, songs_with_lyrics_df, mxm_objects_readable_df)
-    reduce_triplets_by_rows = 100000
-    user_id = st_selectbox_user_id_where_songs_in_songs_with_lyrics_df(triplets_df[:reduce_triplets_by_rows],
-                                                                       songs_with_lyrics_df)
-    recommendation_system = RecommendationSystem(user_id, triplets_df, songs_df, mxm_objects_df, songs_with_lyrics_df,
-                                                 reduce_songs_by_ratings_amount=100,
-                                                 reduce_triplets_by_rows=reduce_triplets_by_rows)
-    if_show_datasets = st_recommendation_system_methods_checkbox(recommendation_system)
-    is_submit = st.button('Wygeneruj rekomendacje')
-    if is_submit:
-        if if_show_datasets:
-            user_songs = get_songs_user_listened_to(triplets_df, user_id)['song_id']
-            show_songs_user_listened_to(triplets_df, user_id, songs_df)
-            show_datasets(songs_with_lyrics_df, mxm_objects_readable_df, user_songs.tolist())
-        show_recommendations(recommendation_system, songs_df, triplets_df, user_id, 10)
+    recommendation_system = RecommendationSystem(None, triplets_df, songs_df, mxm_objects_df, songs_with_lyrics_df,
+                                                 reduce_songs_df=False,
+                                                 reduce_triplets_by_rows=100000)
+    dao_user_recommendation: DAOUserRecommendation = DAOUserRecommendation()
+    counter = 0
+    leng = len(triplets_df[:100000]['user_id'].unique())
+    for user_id in triplets_df['user_id'].unique():
+        recommendation_system.change_user_id(user_id)
+        recommendation_df = recommendation_system.get_recommendations()
+        for column in recommendation_df.columns:
+            if column != 'song_id':
+                recommendation_df[column] = MinMaxScaler().fit_transform(
+                    np.array(recommendation_df[column]).reshape(-1, 1))
+
+        if len(recommendation_df.columns) > 1:
+            recommendation_df['score'] = recommendation_df.mean(axis=1, skipna=True)
+            recommendation_df.sort_values(by=['score'], ascending=False, inplace=True)
+            user_recommendation = UserRecommendation(user_id=user_id,
+                                                     recommendation_list=recommendation_df['song_id'].tolist()[:10])
+            dao_user_recommendation.insert_one(user_recommendation)
+        else:
+            user_recommendation = UserRecommendation(user_id=user_id, recommendation_list=[])
+            dao_user_recommendation.insert_one(user_recommendation)
+        counter += 1
+        print(counter / leng)
